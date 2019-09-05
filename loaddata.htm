@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    body {
+        background-color: powderblue;
+        text-align: center;
+    }
+
+</style>
+<head>
+  <title>Upload your JSON file</title>
+</head>
+<body>
+  <form method="post" enctype="multipart/form-data">
+      <input type="file" name="files[]" value="Choose" multiple />
+      <input type="submit" value="Upload File" name="submit" />
+  </form>
+  <script>
+        const url = 'process.php'
+        const form = document.querySelector('form')
+
+          form.addEventListener('submit', e => {
+            e.preventDefault()
+
+            const files = document.querySelector('[type=file]').files
+            const formData = new FormData()
+
+            for (let i = 0; i < files.length; i++) {
+              let file = files[i]
+              formData.append('files[]', file)
+            }
+
+            fetch(url, {
+              method: 'POST',
+              body: formData,
+            }).then(response => {
+              console.log(response)
+            });
+          });
+  </script>
+</body>
+
+</html>

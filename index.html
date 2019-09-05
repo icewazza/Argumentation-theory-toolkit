@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    body {
+        background-color: powderblue;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 60px;
+        font-weight: bold;
+        font: sans-serif;
+        color: #696969;
+        -webkit-text-stroke-width: 1.5px;
+        -webkit-text-stroke-color: white;
+    }
+    .span1 {
+      font-weight: bold;
+      font: sans-serif;
+      color: #00FF7F;
+    }
+    .span2 {
+      font-weight: bold;
+      font: sans-serif;
+      color: #DC143C;
+    }
+    .panel {
+        background-color: powderblue;
+    }
+
+    button {
+        font-weight: 700;
+        color: white;
+        text-decoration: none;
+        padding: .8em 1em calc(.8em + 3px);
+        border-radius: 3px;
+        background: rgb(64,199,129);
+        box-shadow: 0 -3px rgb(53,167,110) inset;
+        transition: 0.2s;
+        margin: 15px;
+    }
+    button:hover { background: rgb(53, 167, 110); }
+    button:active {
+        background: rgb(33,147,90);
+        box-shadow: 0 3px rgb(33,147,90) inset;
+    }
+
+    .defeated {
+        fill: #DC143C;
+        stroke: #fff;
+        stroke-width: 2px;
+        cursor: pointer;
+    }
+
+    .accepted {
+      fill: #00FF7F;
+      stroke: #fff;
+      stroke-width: 2px;
+      cursor: pointer;
+    }
+
+    .undecidable {
+      fill: #696969;
+      stroke: #fff;
+      stroke-width: 2px;
+      cursor: pointer;
+    }
+
+    .nodelabel {
+      stroke: black;
+      cursor: pointer;
+
+    }
+
+    path.link {
+        fill: none;
+        stroke: #666;
+        stroke-width: 1.5px;
+    }
+</style>
+<head>
+      <meta charset="utf-8">
+      <link rel="stylesheet" href="style.css">
+      <title>Argumentation theory</title>
+      <script src="https://d3js.org/d3.v3.min.js"></script>
+      <script src="graph.json"></script>
+</head>
+<body>
+    <h1><span class="span1">Argument</span><span class="span2">ation</span> theory</h1>
+      <script>
+          var width = 1200;
+              height = 600;
+
+          var links = [
+            {"source":  0, "target":  1},
+            {"source":  1, "target":  2},
+            {"source":  2, "target":  1},
+            {"source":  1, "target":  3},
+            {"source":  2, "target":  4},
+            {"source":  4, "target":  5},
+            {"source":  6, "target":  7},
+            {"source":  7, "target":  6},
+            {"source":  9, "target":  10},
+            {"source":  10, "target":  11},
+            {"source":  11, "target":  9},
+          ];
+
+          var nodes = [
+            {"name": "A0", "class": "accepted"},
+        		{"name":"A1", "class": "defeated"},
+        		{"name":"A2", "class": "accepted"},
+        		{"name":"A3", "class": "accepted"},
+            {"name":"A4", "class": "defeated"},
+        		{"name":"A5", "class": "accepted"},
+        		{"name":"A6", "class": "undecidable"},
+        		{"name":"A7", "class": "undecidable"},
+            {"name":"A8", "class": "accepted"},
+            {"name":"A9", "class": "undecidable"},
+            {"name":"A10", "class": "undecidable"},
+            {"name":"A11", "class": "undecidable"}
+          ];
+
+          var svg = d3.select('body').append('svg')
+              .attr('width', width)
+              .attr('height', height)
+
+
+          var force = d3.layout.force()
+              .size([width, height])
+              .nodes(this.nodes)
+              .links(this.links)
+              .on('tick', tick)
+              .linkDistance(110)
+              .charge(-500)
+              .gravity(.06)
+              .start();
+
+          svg.append("svg:defs").selectAll("marker")
+              .data(["end"])      // Different link/path types can be defined here
+            .enter().append("svg:marker")    // This section adds in the arrows
+              .attr("id", String)
+              .attr("viewBox", "0 -5 10 10")
+              .attr("refX", 25)
+              .attr("refY", -2)
+              .attr("markerWidth", 9)
+              .attr("markerHeight", 9)
+              .attr("orient", "auto")
+              .append("svg:path")
+              .attr("d", "M0,-5L10,0L0,5");
+
+
+              //add the links and the arrows
+          var path = svg.append("svg:g").selectAll("path")
+              .data(force.links())
+              .enter().append("svg:path")
+              .attr("class", "link")
+              .attr("marker-end", "url(#end)");
+
+          var node = svg.selectAll('.node')
+              .data(force.nodes())
+              .enter().append('circle')
+              .attr('class', function(d) { return d.class; })
+              .attr('r', 20)
+              .call(force.drag);
+              // .text(function(d) { return d.name });
+
+
+              // node.append("text")
+              //     .attr("dx", 12)
+              //     .attr("dy", ".35em")
+              //     .text(function(d) { return d.name });
+          var nodelabels = svg.selectAll(".nodelabel")
+             .data(this.nodes)
+             .enter()
+             .append("text")
+             .attr({"x":function(d){return d.x;},
+                    "y":function(d){return d.y;},
+                    "class":"nodelabel"})
+             .text(function(d){return d.name;})
+             .call(force.drag)
+             .style('font-size', '14px');
+          // d3.json("graph.json", function(error, graph) {
+          //     if (error) throw error;
+          // //
+          //   force
+          //       .nodes(graph.nodes)
+          //       .links(graph.links)
+          //       .start();
+          //
+          //   link = link.data(graph.links)
+          //       .enter().append("line")
+          //       .attr("class", "link");
+          //
+          //   node = node.data(graph.nodes)
+          //       .enter().append("circle")
+          //       .attr("class", "node")
+          //       .attr("r", 12)
+          //
+          // });
+
+
+          // function tick(e) {
+          //
+          //     node.attr('cx', function(d) { return d.x; })
+          //         .attr('cy', function(d) { return d.y; })
+          //         .call(force.drag);
+          //
+          //     link.attr('x1', function(d) { return d.source.x; })
+          //         .attr('y1', function(d) { return d.source.y; })
+          //         .attr('x2', function(d) { return d.target.x; })
+          //         .attr('y2', function(d) { return d.target.y; })
+          //         .attr("marker-end", "url(#arrowhead)")
+          //
+          // }
+
+          function tick(e) {
+              path.attr("d", function(d) {
+                var dx = d.target.x - d.source.x,
+                    dy = d.target.y - d.source.y,
+                    dr = Math.sqrt(dx * dx + dy * dy);
+                return "M" +
+                    d.source.x + "," +
+                    d.source.y + "A" +
+                    dr + "," + dr + " 0 0,1 " +
+                    d.target.x + "," +
+                    d.target.y;
+              });
+
+              node.attr("transform", function(d) {
+      	          return "translate(" + d.x + "," + d.y + ")"; });
+
+              nodelabels.attr("x", function(d) { return d.x; })
+                  .attr("y", function(d) { return d.y; });
+          }
+
+          // function colour(d) {
+          //     if (d.group == 1) { node.attr("class", "node1");
+          //     } else if (d.group == 2) { nide.attr("class", "node2");
+          //       } else {
+          //         node.attr("class", "node3");
+          //         }
+          // }
+          function newwindow() {
+              win = window.open("loaddata.htm","win","height=200,width=600");
+          }
+
+
+      </script>
+      <div class="panel">
+        <button id="button1" onclick="newwindow()">Load data</button>
+        <button id="button2" onclick="window.location.reload()">Refresh</button>
+      </div>
+    <!-- <script src="d3.v3.js"></script> -->
+    <!-- <script src="app.js"> </script> -->
+</body>
+</html>

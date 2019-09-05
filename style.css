@@ -1,0 +1,62 @@
+body {
+    background-color: powderblue;
+    text-align: center;
+}
+h1 {
+    font-weight: bold;
+    font: sans-serif;
+}
+.panel {
+    background-color: powderblue;
+}
+
+button {
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    padding: .8em 1em calc(.8em + 3px);
+    border-radius: 3px;
+    background: rgb(64,199,129);
+    box-shadow: 0 -3px rgb(53,167,110) inset;
+    transition: 0.2s;
+    margin: 15px;
+}
+button:hover { background: rgb(53, 167, 110); }
+button:active {
+    background: rgb(33,147,90);
+    box-shadow: 0 3px rgb(33,147,90) inset;
+}
+
+.defeated {
+    fill: #DC143C;
+    stroke: #fff;
+    stroke-width: 2px;
+    cursor: pointer;
+}
+
+.accepted {
+  fill: #00FF7F;
+  stroke: #fff;
+  stroke-width: 2px;
+  cursor: pointer;
+}
+
+.undecidable {
+  fill: #696969;
+  stroke: #fff;
+  stroke-width: 2px;
+  cursor: pointer;
+}
+
+.nodelabel {
+  stroke: black;
+  "dx": "22";
+  dy: .35em;
+
+}
+
+path.link {
+    fill: none;
+    stroke: #666;
+    stroke-width: 1.5px;
+}

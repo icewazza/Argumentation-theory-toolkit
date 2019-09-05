@@ -1,0 +1,29 @@
+{
+  "nodes":[
+    {"name": "A0", "class": "accepted"},
+    {"name":"A1", "class": "defeated"},
+    {"name":"A2", "class": "accepted"},
+    {"name":"A3", "class": "accepted"},
+    {"name":"A4", "class": "defeated"},
+    {"name":"A5", "class": "accepted"},
+    {"name":"A6", "class": "undecidable"},
+    {"name":"A7", "class": "undecidable"},
+    {"name":"A8", "class": "accepted"},
+    {"name":"A9", "class": "undecidable"},
+    {"name":"A10", "class": "undecidable"},
+    {"name":"A11", "class": "undecidable"}
+	],
+	"links":[
+    {"source":  0, "target":  1},
+    {"source":  1, "target":  2},
+    {"source":  2, "target":  1},
+    {"source":  1, "target":  3},
+    {"source":  2, "target":  4},
+    {"source":  4, "target":  5},
+    {"source":  6, "target":  7},
+    {"source":  7, "target":  6},
+    {"source":  9, "target":  10},
+    {"source":  10, "target":  11},
+    {"source":  11, "target":  9},
+	]
+}
